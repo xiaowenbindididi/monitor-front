@@ -1,14 +1,14 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
+        <el-input v-model="dataForm.userName" placeholder="还没做" clearable></el-input>
+      </el-form-item> -->
+      <!-- <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <el-table
       :data="dataList"
@@ -16,11 +16,18 @@
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
-      <el-table-column
+      <!-- <el-table-column
         type="selection"
         header-align="center"
         align="center"
         width="50">
+      </el-table-column> -->
+      <el-table-column
+        prop="id"
+        header-align="center"
+        align="center"
+        width="80"
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="jobId"
@@ -36,31 +43,31 @@
         label="任务名">
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="relatedProject"
         header-align="center"
         align="center"
         label="关联项目">
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="productOwner"
         header-align="center"
         align="center"
         label="产品经理">
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="developer"
         header-align="center"
         align="center"
         label="开发人员">
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="maintainer"
         header-align="center"
         align="center"
         label="运维人员">
       </el-table-column>
       <el-table-column
-        prop="status"
+        prop="jobType"
         header-align="center"
         align="center"
         label="任务类型">
@@ -70,7 +77,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="config"
         header-align="center"
         align="center"
         label="cron配置">
@@ -93,14 +100,14 @@
         label="创建时间">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="nextStartTime"
         header-align="center"
         align="center"
         width="180"
         label="下次开始时间">
       </el-table-column>
       <el-table-column
-        prop="mobile"
+        prop="jobDesc"
         header-align="center"
         align="center"
         label="描述">
@@ -112,8 +119,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">修改</el-button>
-          <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button>
+          <el-button type="text" size="small" @click="jump(scope.row.jobId)">详情</el-button>
+          <!-- <button @click="jump(scope.row.jobId)">详情</button> -->
+          <!-- <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">修改</el-button> -->
+          <!-- <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -127,17 +136,18 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <!-- <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update> -->
+    <add-or-update v-if="addOrUpdateVisible" ref="AddOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
-//   import AddOrUpdate from './user-add-or-update'
+  import AddOrUpdate from './job-detail'
   export default {
     data () {
       return {
         dataForm: {
-          userName: ''
+          jobName: '',
+          id: 0
         },
         dataList: [],
         pageIndex: 1,
@@ -148,9 +158,9 @@
         addOrUpdateVisible: false
       }
     },
-    // components: {
-    //   AddOrUpdate
-    // },
+    components: {
+      AddOrUpdate
+    },
     activated () {
       this.getDataList()
     },
@@ -163,10 +173,10 @@
           method: 'post',
           params: this.$http.adornParams({
             'page': this.pageIndex,
-            'limit': this.pageSize,
-            'username': this.dataForm.userName
+            'limit': this.pageSize
           })
         }).then(({data}) => {
+          console.log('alljobs' + data)
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
@@ -187,48 +197,13 @@
       currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
+      },
+      jump (id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.AddOrUpdate.init(id)
+        })
       }
-    //   // 多选
-    //   selectionChangeHandle (val) {
-    //     this.dataListSelections = val
-    //   },
-    //   // 新增 / 修改
-    //   addOrUpdateHandle (id) {
-    //     this.addOrUpdateVisible = true
-    //     this.$nextTick(() => {
-    //       this.$refs.addOrUpdate.init(id)
-    //     })
-    //   },
-    //   // 删除
-    //   deleteHandle (id) {
-    //     var userIds = id ? [id] : this.dataListSelections.map(item => {
-    //       return item.userId
-    //     })
-    //     this.$confirm(`确定对[id=${userIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-    //       confirmButtonText: '确定',
-    //       cancelButtonText: '取消',
-    //       type: 'warning'
-    //     }).then(() => {
-    //       this.$http({
-    //         url: this.$http.adornUrl('/sys/user/delete'),
-    //         method: 'post',
-    //         data: this.$http.adornData(userIds, false)
-    //       }).then(({data}) => {
-    //         if (data && data.code === 0) {
-    //           this.$message({
-    //             message: '操作成功',
-    //             type: 'success',
-    //             duration: 1500,
-    //             onClose: () => {
-    //               this.getDataList()
-    //             }
-    //           })
-    //         } else {
-    //           this.$message.error(data.msg)
-    //         }
-    //       })
-    //     }).catch(() => {})
-    //   }
     }
   }
 </script>
