@@ -34,13 +34,30 @@
         header-align="center"
         align="center"
         width="80"
-        label="任务ID">
+        label="任务标识">
       </el-table-column>
       <el-table-column
         prop="jobName"
         header-align="center"
         align="center"
-        label="任务名">
+        label="任务名称">
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small" type="danger">正常</el-tag>
+          <el-tag v-else size="small">异常</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        width="180"
+        label="创建时间">
       </el-table-column>
       <el-table-column
         prop="relatedProject"
@@ -52,19 +69,19 @@
         prop="productOwner"
         header-align="center"
         align="center"
-        label="产品经理">
+        label="产品负责人">
       </el-table-column>
       <el-table-column
         prop="developer"
         header-align="center"
         align="center"
-        label="开发人员">
+        label="开发负责人">
       </el-table-column>
       <el-table-column
         prop="maintainer"
         header-align="center"
         align="center"
-        label="运维人员">
+        label="运维负责人">
       </el-table-column>
       <el-table-column
         prop="jobType"
@@ -72,8 +89,8 @@
         align="center"
         label="任务类型">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">周期性</el-tag>
-          <el-tag v-else size="small">单次</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small" type="danger">一次性</el-tag>
+          <el-tag v-else size="small">周期性</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -83,28 +100,11 @@
         label="cron配置">
       </el-table-column>
       <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">异常</el-tag>
-          <el-tag v-else size="small">正常</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        width="180"
-        label="创建时间">
-      </el-table-column>
-      <el-table-column
         prop="nextStartTime"
         header-align="center"
         align="center"
         width="180"
-        label="下次开始时间">
+        label="下次运行时间">
       </el-table-column>
       <el-table-column
         prop="jobDesc"
