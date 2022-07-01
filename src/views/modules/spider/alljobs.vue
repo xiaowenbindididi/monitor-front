@@ -48,8 +48,8 @@
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">正常</el-tag>
-          <el-tag v-else size="small">异常</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small">正常</el-tag>
+          <el-tag v-else size="small" type="danger">异常</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -89,16 +89,16 @@
         align="center"
         label="任务类型">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">一次性</el-tag>
+          <el-tag v-if="scope.row.jobType === 0" size="small">一次性</el-tag>
           <el-tag v-else size="small">周期性</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="config"
         header-align="center"
         align="center"
         label="cron配置">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="nextStartTime"
         header-align="center"
@@ -130,7 +130,7 @@
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
       :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
+      :page-sizes="[30,50]"
       :page-size="pageSize"
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
@@ -151,7 +151,7 @@
         },
         dataList: [],
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 50,
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],

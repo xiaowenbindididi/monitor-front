@@ -2,10 +2,9 @@
   <div class="site-wrapper site-page--login">
     <div class="site-content__wrapper">
       <div class="site-content">
-        <!-- <div class="brand-info">
-          <h2 class="brand-info__text">renren-fast-vue</h2>
-          <p class="brand-info__intro">renren-fast-vue基于vue、element-ui构建开发，实现renren-fast后台管理前端功能，提供一套更优的前端解决方案。</p>
-        </div> -->
+        <div class="brand-info">
+          <h1 class="brand-info__text">爬虫监控系统V1</h1>
+        </div>
         <div class="login-main">
           <h3 class="login-title">管理员登录</h3>
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
@@ -106,7 +105,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(38, 50, 56, .6);
+    background-color: rgba(240, 234, 236, 0.6);
     overflow: hidden;
     &:before {
       position: fixed;
@@ -137,7 +136,7 @@
     }
     .brand-info {
       margin: 220px 100px 0 90px;
-      color: #fff;
+      color: rgb(14, 1, 1);
     }
     .brand-info__text {
       margin:  0 0 22px 0;
